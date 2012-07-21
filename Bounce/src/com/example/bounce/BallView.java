@@ -29,12 +29,9 @@ public class BallView extends View {
 		accel -= 0.5;
 
 		if (height >= (bottom - radius)) {
-			// if (Math.abs(accel) >= 2)
 			accel = (Math.abs(accel) * bounciness);
 			if (bounciness >= 0.01)
 				bounciness -= 0.01;
-			// else
-			// accel = 0;
 		}
 
 		try {
