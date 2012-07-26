@@ -8,16 +8,15 @@ public class BallObject {
 
 	private double height;
 	private double width;
-	private double oldposx;
-	private double oldposy;
 	private double posx;
 	private double posy;
 	private double accx;
 	private double accy;
 	private double friction = 0.025;
-	private double bounce;
 
-	private Canvas backupCanvas;
+	private double bounce;
+	private double defbounce;
+
 
 	private int radius;
 	private Paint p;
@@ -29,6 +28,7 @@ public class BallObject {
 		this.accx = accx;
 		this.accy = accy;
 		this.bounce = bounce;
+		this.defbounce = bounce;
 		this.radius = radius;
 		this.p = p;
 	}
@@ -91,9 +91,6 @@ public class BallObject {
 
 	public void update() {
 
-		oldposy = posy;
-		oldposx = posx;
-
 		posy -= accy;
 		accy -= 0.5;
 		posx += accx;
@@ -105,8 +102,8 @@ public class BallObject {
 
 		if (posy >= (height - radius)) {
 			accy = (Math.abs(accy) * bounce);
-			// if (bounce >= 0.01)
-			// bounce -= 0.01;
+			if (bounce > 0)
+				bounce -= 0.01;
 		}
 
 		if (posy <= (0 + radius)) {
@@ -124,14 +121,6 @@ public class BallObject {
 
 	public void draw(Canvas c) {
 
-		if (c != null)
-			backupCanvas = c;
-		else
-			c = backupCanvas;
-
-		if (c == null)
-			return;
-
 		height = c.getClipBounds().height();
 		width = c.getClipBounds().width();
 		c.drawCircle((float) posx, (float) posy, (float) radius, p);
@@ -139,14 +128,8 @@ public class BallObject {
 
 	public void control(MotionEvent e) {
 
-		// if (posx > e.getX())
-		accx = (e.getX() - posx) / 10;
-		// else
-		// accx = (e.getX() - posx) / 10;
-		// if (posy < e.getY())
-		accy = (e.getY() - posy) / -10;
-		// else
-		// accy = (e.getY() - posy) / 10;
-
+		accx = (e.getX() - posx) / 5;
+		accy = (e.getY() - posy) / -5;
+		bounce = defbounce;
 	}
 }
