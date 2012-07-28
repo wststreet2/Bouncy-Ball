@@ -18,7 +18,7 @@ public class BallView extends View {
 		super(context);
 		mPaint = new Paint();
 		mPaint.setARGB(0xFF, 0x00, 0x80, 0xFF);
-		ball = new BallObject(100.0, 50.0, 4.0, 10.0, 0.8, 10, mPaint);
+		ball = new BallObject(100.0, 50.0, 4.0, 10.0, 0.8, 10, mPaint, this);
 		block = new BlocksObject(400, 1000, 450, 1050);
 		ball.setBlock(block);
 	}
