@@ -1,5 +1,6 @@
 package com.example.bounce;
 
+import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.media.AudioManager;
@@ -25,6 +26,9 @@ public class BallObject {
 	private double bounce;
 	private double defbounce;
 
+	AudioManager audio;
+	float currentVolume;
+
 	private int radius;
 	private Paint p;
 
@@ -42,6 +46,9 @@ public class BallObject {
 		sounds = new SoundPool(10, AudioManager.STREAM_MUSIC, 0);
 		bounceSound = sounds.load(v.getContext(), R.raw.bounce, 1);
 		touchSound = sounds.load(v.getContext(), R.raw.piu, 1);
+
+		audio = (AudioManager) v.getContext().getSystemService(
+				Context.AUDIO_SERVICE);
 	}
 
 	public double getPosx() {
@@ -156,8 +163,10 @@ public class BallObject {
 	}
 
 	public void playsound() {
-		sounds.play(bounceSound, (float) Math.abs(bounce*bounce) * 0.1f,
-				(float) Math.abs(bounce*bounce) * 0.1f, 0, 0, 1.0f);
+		currentVolume = audio.getStreamVolume(AudioManager.STREAM_MUSIC) / 15.0f;
+		sounds.play(bounceSound, (float) Math.abs(bounce * bounce)
+				* currentVolume, (float) Math.abs(bounce * bounce)
+				* currentVolume, 0, 0, 1.0f);
 	}
 
 	public void draw(Canvas c) {
@@ -168,7 +177,8 @@ public class BallObject {
 	}
 
 	public void control(MotionEvent e) {
-		sounds.play(touchSound, 1.0f, 1.0f, 0, 0, 1.5f);
+		currentVolume = audio.getStreamVolume(AudioManager.STREAM_MUSIC) / 15.0f;
+		sounds.play(touchSound, currentVolume, currentVolume, 0, 0, 1.5f);
 		accx = (e.getX() - posx) / 25;
 		accy = (e.getY() - posy) / -25;
 		bounce = defbounce;
