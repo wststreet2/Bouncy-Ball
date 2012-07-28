@@ -13,10 +13,10 @@ public class BallObject {
 	private double accx;
 	private double accy;
 	private double friction = 0.025;
+	private BlocksObject block = null;
 
 	private double bounce;
 	private double defbounce;
-
 
 	private int radius;
 	private Paint p;
@@ -61,6 +61,10 @@ public class BallObject {
 		return p;
 	}
 
+	public void setBlock(BlocksObject block) {
+		this.block = block;
+	}
+
 	public void setPosx(double posx) {
 		this.posx = posx;
 	}
@@ -94,6 +98,20 @@ public class BallObject {
 		posy -= accy;
 		accy -= 0.5;
 		posx += accx;
+		
+		if(block.isBlockDeleted()==false)
+		{
+			if(block.getRect().contains((int)posx,(int)posy+radius) || block.getRect().contains((int)posx,(int)posy-radius))
+			{
+				block.delete();
+				accy = accy * -1;
+			}
+			if(block.getRect().contains((int)posx+radius,(int)posy) || block.getRect().contains((int)posx-radius,(int)posy))
+			{
+				block.delete();
+				accx = accx * -1;
+			}
+		}
 
 		if (accx > 0)
 			accx -= friction;
@@ -128,8 +146,8 @@ public class BallObject {
 
 	public void control(MotionEvent e) {
 
-		accx = (e.getX() - posx) / 5;
-		accy = (e.getY() - posy) / -5;
+		accx = (e.getX() - posx) / 25;
+		accy = (e.getY() - posy) / -25;
 		bounce = defbounce;
 	}
 }
